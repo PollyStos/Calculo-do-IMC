@@ -64,3 +64,15 @@ form button {
 form button:hover {
   background: var(--primary-color-darker);
 }
+
+.paragrafo-resposta{
+  background: rgb(81, 209, 81);
+  padding: 10px 20px;
+  border-radius: 20px;
+}
+
+.bad{
+  background: rgb(221, 100, 100);
+  padding: 10px 20px;
+  border-radius: 20px;
+}

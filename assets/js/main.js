@@ -5,58 +5,71 @@ function main() {
     const resp = document.querySelector(".resposta");
     const peso = form.querySelector('#peso');
     const altura = form.querySelector('#altura');
-
+    
     form.addEventListener('submit', function (e) {
         e.preventDefault();
+        resp.innerHTML = "";
 
         const pesoValido = validaDados(peso, "peso");
         const alturaValida = validaDados(altura, "altura");
-
-        const imc = calculaIMC(pesoValido, alturaValida);
-        respResultado(imc);
+        
+        if(pesoValido && alturaValida){
+            const imc = calculaIMC(pesoValido, alturaValida);
+            const msg = resultadoIMC(imc);
+            mensagemDisplay(msg);
+        }
     });
-
+    
     function validaDados(dado, valid) {
         const num = Number(dado.value);
-        console.log(num, valid);
+        
         if (!num) {
-            if (valid === "peso") {
-                console.log('sim');
-                resp.innerHTML += "<p>Peso inválido</p>";
-            } else {
-                resp.innerHTML += "<p>Altura inválida</p>";
-            }
-        } else {
-            resp.innerHTML = "";
-            return num;
+            const p = criaP();
+            p.classList.add("bad");
+            
+            p.innerHTML = valid === "peso"? "Peso inválido": "Altura inválida";
+            
+            resp.appendChild(p);
+            return;
         }
+        return num;  
     }
-    function validaAltura() {
-        console.log('valida altura');
+    
+    function criaP() {
+        const p = document.createElement('p');
+        return p;
     }
+
     function calculaIMC(peso, altura) {
         const imc = peso / (altura ** 2);
         return imc.toFixed(2);
     }
-    function respResultado(imc) {
+
+    function resultadoIMC(imc) {
+        let msg = 'Seu IMC é ';
+        const possiveisMsg = [' e você está abaixo do peso.', ' e você está com o peso normal.', ' e você está com sobrepeso', ' e você está com obesidade de grau 1.', ' e você está com obesidade de grau 2.', ' e você está com obesidade de grau 3.']
         if (imc < 18.5) {
-            resp.innerHTML += `<p>Seu IMC é ${imc} e você está abaixo do peso.</p>`;
+            msg += imc + possiveisMsg[0];
 
         } else if (imc < 25) {
-            resp.innerHTML += `<p>Seu IMC é ${imc} e você está com o peso normal.</p>`;
-
+            msg += imc + possiveisMsg[1];
         } else if (imc < 30) {
-            resp.innerHTML += `<p>Seu IMC é ${imc} e você está com sobrepeso</p>`;
-
+            msg += imc + possiveisMsg[2];
         } else if (imc < 35) {
-            resp.innerHTML += `<p>Seu IMC é ${imc} e você está com obesidade de grau 1.</p>`;
-
+            msg += imc + possiveisMsg[3];
         } else if (imc < 40) {
-            resp.innerHTML += `<p>Seu IMC é ${imc} e você está com obesidade de grau 2.</p>`;
+            msg += imc + possiveisMsg[4];
         } else {
-            resp.innerHTML += `<p>Seu IMC é ${imc} e você está com obesidade de grau 3.</p>`;
+            msg += imc + possiveisMsg[5];
         }
+        return msg;
+    }
+    
+    function mensagemDisplay(msg){
+        const p = criaP();
+            p.classList.add("paragrafo-resposta");
+            p.innerHTML =msg;            
+            resp.appendChild(p);
     }
 }
-
 main();
